@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COL – Clínica Psicológica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Colors */
+  --canvas: #F7F6F2;
+  --surface: #FFFFFF;
+  --ink: #1C1917;
+  --muted: #78716C;
+  --border: rgba(0,0,0,0.08);
+  --accent: #9A7B4F;
+  --accent-hover: #7A6340;
+  --accent-soft: rgba(154,123,79,0.08);
+
+  /* Typography */
+  --display: 'Geist', 'Instrument Serif', sans-serif;
+  --body: 'Geist', sans-serif;
+  --serif-italic: 'Instrument Serif', serif;
+
+  /* Spacing */
+  --section-gap: clamp(4rem, 10vw, 8rem);
+  --container: min(1400px, 90vw);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--body);
+  background: var(--canvas);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* ========== ANIMATIONS ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ========== NAVIGATION ========== */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.25rem 0;
+  background: rgba(247,246,242,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s ease;
+}
+
+nav .nav-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+  transition: color 0.25s ease;
+  position: relative;
+}
+
+.nav-links a:hover {
+  color: var(--ink);
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-cta {
+  background: var(--ink) !important;
+  color: var(--canvas) !important;
+  padding: 0.6rem 1.5rem;
+  border-radius: 100px;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  transition: transform 0.2s ease, background 0.2s ease !important;
+}
+
+.nav-cta:hover {
+  transform: scale(0.97);
+  background: var(--accent-hover) !important;
+}
+
+.nav-cta::after { display: none !important; }
+
+/* ========== HERO ========== */
+.hero {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: calc(80px + 2rem) 0 2rem;
+  max-width: var(--container);
+  margin: 0 auto;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.hero-content {
+  padding-right: 2rem;
+}
+
+.hero-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hero-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 em {
+  font-family: var(--serif-italic);
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero p {
+  font-size: 1.0625rem;
+  color: var(--muted);
+  max-width: 480px;
+  line-height: 1.75;
+  margin-bottom: 2.5rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.9rem 2rem;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--ink);
+  padding: 0.9rem 2rem;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.hero-image {
+  position: relative;
+  height: min(70vh, 600px);
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(154,123,79,0.1), transparent 60%);
+  pointer-events: none;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.stat-number {
+  font-family: var(--display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.stat-label {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  margin-top: 0.125rem;
+}
+
+/* ========== ABOUT ========== */
+.about {
+  padding: var(--section-gap) 0;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: clamp(3rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.about-image-wrap {
+  position: relative;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+}
+
+.about-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-image-wrap:hover img {
+  transform: scale(1.02);
+}
+
+.about-tag {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.about h2 {
+  font-family: var(--display);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+.about h2 em {
+  font-family: var(--serif-italic);
+  font-style: italic;
+  color: var(--accent);
+}
+
+.about-text {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.8;
+  max-width: 540px;
+}
+
+.about-text + .about-text {
+  margin-top: 1.25rem;
+}
+
+/* ========== SERVICES ========== */
+.services {
+  padding: var(--section-gap) 0;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+.services-header {
+  text-align: left;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+  max-width: 600px;
+}
+
+.services-header h2 {
+  font-family: var(--display);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+
+.services-header p {
+  color: var(--muted);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+/* Zigzag layout instead of 3 equal cards */
+.service-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: center;
+  padding: clamp(2rem, 4vw, 3.5rem);
+  border-radius: 1.5rem;
+  transition: background 0.3s ease;
+}
+
+.service-item:not(:last-child) {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.service-item:hover {
+  background: var(--accent-soft);
+}
+
+.service-item:nth-child(even) .service-visual {
+  order: -1;
+}
+
+.service-number {
+  font-family: var(--display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.service-item h3 {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+  line-height: 1.15;
+}
+
+.service-item p {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  max-width: 440px;
+}
+
+.service-visual {
+  height: 320px;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+}
+
+.service-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ========== METHOD ========== */
+.method {
+  padding: var(--section-gap) 0;
+  background: var(--ink);
+  color: var(--canvas);
+}
+
+.method-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+.method-tag {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.method h2 {
+  font-family: var(--display);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+
+.method h2 em {
+  font-family: var(--serif-italic);
+  font-style: italic;
+  color: var(--accent);
+}
+
+.method-desc {
+  color: rgba(255,255,255,0.5);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  max-width: 540px;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.method-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.step {
+  padding: 2rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 1.25rem;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.step:hover {
+  border-color: rgba(154,123,79,0.3);
+  transform: translateY(-2px);
+}
+
+.step-num {
+  font-family: var(--display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  opacity: 0.6;
+}
+
+.step h4 {
+  font-family: var(--display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.step p {
+  color: rgba(255,255,255,0.45);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+/* ========== TESTIMONIALS ========== */
+.testimonials {
+  padding: var(--section-gap) 0;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+.testimonials-header {
+  text-align: left;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.testimonials-header h2 {
+  font-family: var(--display);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+
+.testimonials-header p {
+  color: var(--muted);
+  font-size: 1.0625rem;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1.5rem;
+}
+
+.testimonial-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  padding: 2.25rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.06);
+}
+
+.testimonial-card:first-child {
+  grid-row: 1 / 3;
+}
+
+.testimonial-quote {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-quote::before {
+  content: '"';
+  font-family: var(--serif-italic);
+  font-size: 3rem;
+  color: var(--accent);
+  line-height: 0;
+  display: block;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.testimonial-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.testimonial-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.testimonial-name {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.testimonial-role {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+/* ========== CTA SECTION ========== */
+.cta-section {
+  padding: var(--section-gap) 0;
+  max-width: var(--container);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cta-inner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  padding: clamp(3rem, 8vw, 6rem) 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-inner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(154,123,79,0.06), transparent 70%);
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.cta-section h2 em {
+  font-family: var(--serif-italic);
+  font-style: italic;
+  color: var(--accent);
+}
+
+.cta-section p {
+  color: var(--muted);
+  font-size: 1.0625rem;
+  max-width: 480px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+  position: relative;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.cta-phone {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-top: 2rem;
+  position: relative;
+}
+
+.cta-phone a {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ========== FOOTER ========== */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 3rem 0;
+}
+
+.footer-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-inner p {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: var(--ink);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: calc(80px + 1.5rem) 0 3rem;
+  }
+
+  .hero-content { padding-right: 0; }
+  .hero-image { height: 50vh; }
+  .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+
+  .nav-links { display: none; }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-image-wrap { aspect-ratio: 16/10; }
+
+  .service-item {
+    grid-template-columns: 1fr;
+  }
+
+  .service-item:nth-child(even) .service-visual {
+    order: 0;
+  }
+
+  .method-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .testimonial-card:first-child {
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: 2.25rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-primary, .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cta-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-actions .btn-primary,
+  .cta-actions .btn-secondary {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-links {
+    gap: 1.25rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">C<span>O</span>L</div>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#metodo">Método</a></li>
+      <li><a href="#depoimentos">Depoimentos</a></li>
+      <li><a href="#contato" class="nav-cta">Agendar</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-content reveal">
+    <div class="hero-label">Clínica Psicológica</div>
+    <h1>Espaço onde a<br>mente encontra<br><em>clareza</em></h1>
+    <p>Atendimento psicológico baseado em evidências, sem jargão desnecessário. Resultados reais para pessoas que decidiram olhar pra dentro.</p>
+    <div class="hero-actions">
+      <a href="#contato" class="btn-primary">
+        Agendar consulta
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#metodo" class="btn-secondary">Conhecer método</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-number">2.400+</div>
+        <div class="stat-label">Pacientes atendidos</div>
+      </div>
+      <div>
+        <div class="stat-number">12 anos</div>
+        <div class="stat-label">Experiência clínica</div>
+      </div>
+      <div>
+        <div class="stat-number">47,2%</div>
+        <div class="stat-label">Melhora nas 8 primeiras sessões</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-image reveal" style="transition-delay: 0.15s">
+    <img src="https://picsum.photos/seed/clinica01/800/1000" alt="Ambiente acolhedor da clínica COL">
+  </div>
+</section>
+
+<!-- ========== ABOUT ========== -->
+<section class="about" id="sobre">
+  <div class="about-grid">
+    <div class="about-image-wrap reveal">
+      <img src="https://picsum.photos/seed/psicologa02/800/1000" alt="Profissional da clínica">
+    </div>
+    <div class="reveal" style="transition-delay: 0.15s">
+      <div class="about-tag">Sobre a COL</div>
+      <h2>Não vendemos <em>felicidade</em>. Oferecemos ferramentas.</h2>
+      <p class="about-text">A COL nasceu de uma constatação simples: a maioria das pessoas chega à terapia sem saber o que esperar. Aqui, o processo é transparente — desde a primeira sessão você sabe o que vai acontecer, quanto tempo pode levar e quais são seus direitos.</p>
+      <p class="about-text">Trabalhamos com TCC, terapia analítico-comportamental e neuropsicologia aplicada. Sem misticismo, sem promessa de cura em três sessões. Ciência e escuta, nessa ordem.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SERVICES ========== -->
+<section class="services" id="servicos">
+  <div class="services-header reveal">
+    <div class="about-tag">Serviços</div>
+    <h2>Cada processo exige uma abordagem diferente</h2>
+    <p>Modalidades pensadas pra resolver, não pra criar dependência.</p>
+  </div>
+
+  <div class="service-item reveal">
+    <div class="service-text">
+      <div class="service-number">01</div>
+      <h3>Terapia Individual</h3>
+      <p>Sessões semanais de 50 minutos. Foco em ansiedade, depressão, luto e autoconhecimento. O formato mais eficaz quando há um objetivo claro definido juntos.</p>
+    </div>
+    <div class="service-visual">
+      <img src="https://picsum.photos/seed/terapia03/600/400" alt="Terapia individual">
+    </div>
+  </div>
+
+  <div class="service-item reveal" style="transition-delay: 0.1s">
+    <div class="service-text">
+      <div class="service-number">02</div>
+      <h3>Terapia de Casal</h3>
+      <p>Encontros quinzenais de 80 minutos. Mediação de conflitos, comunicação e reconstrução de vínculo. Não é arbitragem — é estruturação.</p>
+    </div>
+    <div class="service-visual">
+      <img src="https://picsum.photos/seed/casal04/600/400" alt="Terapia de casal">
+    </div>
+  </div>
+
+  <div class="service-item reveal" style="transition-delay: 0.1s">
+    <div class="service-text">
+      <div class="service-number">03</div>
+      <h3>Avaliação Neuropsicológica</h3>
+      <p>Bateria de testes padronizados para TDAH, TEA, funções executivas e memória. Relatório detalhado com devolutiva completa e encaminhamentos quando necessário.</p>
+    </div>
+    <div class="service-visual">
+      <img src="https://picsum.photos/seed/neuro05/600/400" alt="Avaliação neuropsicológica">
+    </div>
+  </div>
+
+  <div class="service-item reveal" style="transition-delay: 0.1s">
+    <div class="service-text">
+      <div class="service-number">04</div>
+      <h3>Atendimento Online</h3>
+      <p>Mesma estrutura do presencial, por videochamada segura. Para quem mora fora, tem rotina apertada ou prefere o conforto de casa. Plataforma com criptografia de ponta a ponta.</p>
+    </div>
+    <div class="service-visual">
+      <img src="https://picsum.photos/seed/online06/600/400" alt="Atendimento online">
+    </div>
+  </div>
+</section>
+
+<!-- ========== METHOD ========== -->
+<section class="method" id="metodo">
+  <div class="method-inner">
+    <div class="method-tag reveal">Método</div>
+    <h2 class="reveal">Sem mistério.<br><em>Sem dependência.</em></h2>
+    <p class="method-desc reveal">A terapia não precisa durar anos. Nosso objetivo é que você saia andando com as próprias pernas.</p>
+
+    <div class="method-steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <h4>Mapeamento</h4>
+        <p>Primeiras 2 sessões são de escuta e avaliação. Entendemos o contexto, histórico e definimos objetivos mensuráveis juntos.</p>
+      </div>
+      <div class="step reveal" style="transition-delay: 0.1s">
+        <div class="step-num">02</div>
+        <h4>Intervenção</h4>
+        <p>Técnicas baseadas em evidências aplicadas de forma direta. Cada sessão tem pauta, cada pauta tem direção. Sem divagação infinita.</p>
+      </div>
+      <div class="step reveal" style="transition-delay: 0.2s">
+        <div class="step-num">03</div>
+        <h4>Alta Terapêutica</h4>
+        <p>Quando os objetivos são atingidos, encerramos com plano de manutenção. Você não fica preso — vai embora preparado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TESTIMONIALS ========== -->
+<section class="testimonials" id="depoimentos">
+  <div class="testimonials-header reveal">
+    <div class="about-tag">Depoimentos</div>
+    <h2 class="reveal">O que dizem quem passou por aqui</h2>
+  </div>
+
+  <div class="testimonial-grid">
+    <div class="testimonial-card reveal">
+      <div class="testimonial-quote">
+        Depois de dois anos num terapeuta que só acenava e dizia "como você se sente com isso", na COL tive pela primeira vez alguém que me deu direção real. Em quatro meses eu já conseguia identificar os gatilhos e lidar sem entrar em espiral.
+      </div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">
+          <img src="https://i.pravatar.cc/100?img=32" alt="Marina Costela">
+        </div>
+        <div>
+          <div class="testimonial-name">Marina Costela</div>
+          <div class="testimonial-role">Designer, 31 anos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card reveal" style="transition-delay: 0.1s">
+      <div class="testimonial-quote">
+        Minha esposa e eu estávamos à beira do divórcio. A terapia de casal aqui nos ensinou a conversar de novo — não a concordar, mas a conversar. Fez diferença real.
+      </div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">
+          <img src="https://i.pravatar.cc/100?img=12" alt="Rafael Mendes">
+        </div>
+        <div>
+          <div class="testimonial-name">Rafael Mendes</div>
+          <div class="testimonial-role">Engenheiro, 38 anos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card reveal" style="transition-delay: 0.2s">
+      <div class="testimonial-quote">
+        Fiz a avaliação neuropsicológica pro meu filho. O relatório foi o mais completo que já recebi — a escola inteira usou como base.
+      </div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">
+          <img src="https://i.pravatar.cc/100?img=26" alt="Camila Rocha Dias">
+        </div>
+        <div>
+          <div class="testimonial-name">Camila Rocha Dias</div>
+          <div class="testimonial-role">Professora, 44 anos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA ========== -->
+<section class="cta-section" id="contato">
+  <div class="cta-inner reveal">
+    <h2>O primeiro passo é<br>o mais <em>difícil</em></h2>
+    <p>Agende sua primeira sessão. Sem compromisso de continuidade — você decide quando parar.</p>
+    <div class="cta-actions">
+      <a href="https://wa.me/5511999999999" class="btn-primary" target="_blank" rel="noopener">
+        Agendar pelo WhatsApp
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="tel:+551147852854" class="btn-secondary">Ligar agora</a>
+    </div>
+    <p class="cta-phone">Ou ligue direto: <a href="tel:+551147852854">(11) 4785-2854</a></p>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="footer-inner">
+    <p>COL Clínica Psicológica — CRP 06/XXXXX</p>
+    <ul class="footer-links">
+      <li><a href="#">Política de Privacidade</a></li>
+      <li><a href="#">Instagram</a></li>
+      <li><a href="#">Contato</a></li>
+    </ul>
+  </div>
+</footer>
+
+<!-- ========== SCROLL REVEAL ========== -->
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
