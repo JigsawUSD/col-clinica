@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>COL – Clínica Psicológica</title>
+<title>COL – Clínica Odontológica</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
@@ -11,20 +11,21 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  /* Colors */
-  --canvas: #F7F6F2;
+  /* Colors – Yellow & Black */
+  --canvas: #FAFAFA;
   --surface: #FFFFFF;
-  --ink: #1C1917;
-  --muted: #78716C;
+  --ink: #0A0A0A;
+  --ink-soft: #1A1A1A;
+  --muted: #6B6B6B;
   --border: rgba(0,0,0,0.08);
-  --accent: #9A7B4F;
-  --accent-hover: #7A6340;
-  --accent-soft: rgba(154,123,79,0.08);
+  --accent: #E8B800;
+  --accent-hover: #C9A200;
+  --accent-soft: rgba(232,184,0,0.08);
+  --accent-dark: #B89200;
 
   /* Typography */
-  --display: 'Geist', 'Instrument Serif', sans-serif;
-  --body: 'Geist', sans-serif;
-  --serif-italic: 'Instrument Serif', serif;
+  --display: 'Geist', sans-serif;
+  --serif: 'Instrument Serif', serif;
 
   /* Spacing */
   --section-gap: clamp(4rem, 10vw, 8rem);
@@ -34,7 +35,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: var(--body);
+  font-family: var(--display);
   background: var(--canvas);
   color: var(--ink);
   line-height: 1.7;
@@ -52,14 +53,15 @@ img { display: block; max-width: 100%; }
   transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
 }
 
 @keyframes float {
@@ -67,9 +69,14 @@ img { display: block; max-width: 100%; }
   50% { transform: translateY(-8px); }
 }
 
-@keyframes shimmer {
+@keyframes shimmer-line {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232,184,0,0.2); }
+  50% { box-shadow: 0 0 30px 10px rgba(232,184,0,0.08); }
 }
 
 /* ========== NAVIGATION ========== */
@@ -80,7 +87,7 @@ nav {
   right: 0;
   z-index: 100;
   padding: 1.25rem 0;
-  background: rgba(247,246,242,0.85);
+  background: rgba(250,250,250,0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
@@ -97,14 +104,22 @@ nav .nav-inner {
 
 .logo {
   font-family: var(--display);
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
   color: var(--ink);
+  position: relative;
 }
 
-.logo span {
-  color: var(--accent);
+.logo::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
 }
 
 .nav-links {
@@ -133,7 +148,7 @@ nav .nav-inner {
   bottom: -4px;
   left: 0;
   width: 0;
-  height: 1px;
+  height: 2px;
   background: var(--accent);
   transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -144,17 +159,18 @@ nav .nav-inner {
 
 .nav-cta {
   background: var(--ink) !important;
-  color: var(--canvas) !important;
+  color: var(--accent) !important;
   padding: 0.6rem 1.5rem;
   border-radius: 100px;
   font-size: 0.8125rem !important;
   font-weight: 600 !important;
   transition: transform 0.2s ease, background 0.2s ease !important;
+  border: 2px solid var(--accent);
 }
 
 .nav-cta:hover {
   transform: scale(0.97);
-  background: var(--accent-hover) !important;
+  border-color: var(--accent-hover) !important;
 }
 
 .nav-cta::after { display: none !important; }
@@ -169,6 +185,7 @@ nav .nav-inner {
   max-width: var(--container);
   margin: 0 auto;
   gap: clamp(2rem, 5vw, 4rem);
+  position: relative;
 }
 
 .hero-content {
@@ -179,8 +196,8 @@ nav .nav-inner {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--accent);
-  font-weight: 600;
+  color: var(--accent-dark);
+  font-weight: 700;
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
@@ -189,25 +206,30 @@ nav .nav-inner {
 
 .hero-label::before {
   content: '';
-  width: 24px;
-  height: 1px;
+  width: 32px;
+  height: 3px;
   background: var(--accent);
 }
 
 .hero h1 {
   font-family: var(--display);
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
+  font-size: clamp(2.75rem, 5.5vw, 5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
   color: var(--ink);
   margin-bottom: 1.5rem;
+  text-transform: uppercase;
 }
 
-.hero h1 em {
-  font-family: var(--serif-italic);
-  font-style: italic;
+.hero h1 .accent {
   color: var(--accent);
+  display: block;
+}
+
+.hero h1 .outline {
+  -webkit-text-stroke: 2px var(--ink);
+  color: transparent;
 }
 
 .hero p {
@@ -230,21 +252,23 @@ nav .nav-inner {
   align-items: center;
   gap: 0.5rem;
   background: var(--accent);
-  color: #fff;
-  padding: 0.9rem 2rem;
+  color: var(--ink);
+  padding: 1rem 2.25rem;
   border-radius: 100px;
   font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   border: none;
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
   text-decoration: none;
+  text-transform: uppercase;
 }
 
 .btn-primary:hover {
   background: var(--accent-hover);
   transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(232,184,0,0.25);
 }
 
 .btn-primary:active {
@@ -257,62 +281,125 @@ nav .nav-inner {
   gap: 0.5rem;
   background: transparent;
   color: var(--ink);
-  padding: 0.9rem 2rem;
+  padding: 1rem 2.25rem;
   border-radius: 100px;
   font-size: 0.875rem;
-  font-weight: 500;
-  border: 1px solid var(--border);
+  font-weight: 600;
+  border: 2px solid var(--ink);
   cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   text-decoration: none;
+  text-transform: uppercase;
 }
 
 .btn-secondary:hover {
   border-color: var(--accent);
-  background: var(--accent-soft);
+  background: var(--ink);
+  color: var(--accent);
 }
 
 .hero-image {
   position: relative;
-  height: min(70vh, 600px);
+  height: min(70vh, 650px);
   border-radius: 1.5rem;
   overflow: hidden;
+  border: 3px solid var(--ink);
 }
 
 .hero-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: contrast(1.05);
 }
 
 .hero-image::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(154,123,79,0.1), transparent 60%);
+  background: linear-gradient(135deg, rgba(232,184,0,0.12), transparent 60%);
   pointer-events: none;
+}
+
+.hero-badge {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  background: var(--accent);
+  color: var(--ink);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.75rem;
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  animation: glow 3s ease-in-out infinite;
 }
 
 .hero-stats {
   display: flex;
-  gap: 2.5rem;
+  gap: 2rem;
   margin-top: 3rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--border);
+}
+
+.stat {
+  padding-left: 1rem;
+  border-left: 3px solid var(--accent);
 }
 
 .stat-number {
   font-family: var(--display);
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--ink);
 }
 
 .stat-label {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   margin-top: 0.125rem;
+}
+
+/* ========== MARQUEE ========== */
+.marquee {
+  background: var(--ink);
+  color: var(--canvas);
+  padding: 1rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-track {
+  display: inline-flex;
+  animation: marquee 25s linear infinite;
+  gap: 3rem;
+}
+
+.marquee-item {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.marquee-item .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* ========== ABOUT ========== */
@@ -326,7 +413,7 @@ nav .nav-inner {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
   gap: clamp(3rem, 6vw, 6rem);
-  align-items: start;
+  align-items: center;
 }
 
 .about-image-wrap {
@@ -334,6 +421,7 @@ nav .nav-inner {
   border-radius: 1.25rem;
   overflow: hidden;
   aspect-ratio: 4/5;
+  border: 3px solid var(--ink);
 }
 
 .about-image-wrap img {
@@ -347,27 +435,49 @@ nav .nav-inner {
   transform: scale(1.02);
 }
 
+.about-image-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: var(--accent);
+  color: var(--ink);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 800;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+}
+
 .about-tag {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--accent);
-  font-weight: 600;
+  color: var(--accent-dark);
+  font-weight: 700;
   margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.about-tag::before {
+  content: '';
+  width: 24px;
+  height: 3px;
+  background: var(--accent);
 }
 
 .about h2 {
   font-family: var(--display);
   font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 400;
-  line-height: 1.1;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
   letter-spacing: -0.03em;
   margin-bottom: 1.5rem;
 }
 
-.about h2 em {
-  font-family: var(--serif-italic);
-  font-style: italic;
+.about h2 .accent {
   color: var(--accent);
 }
 
@@ -382,6 +492,41 @@ nav .nav-inner {
   margin-top: 1.25rem;
 }
 
+.about-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.about-feature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.about-feature .check {
+  width: 24px;
+  height: 24px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.about-feature .check svg {
+  width: 12px;
+  height: 12px;
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
 /* ========== SERVICES ========== */
 .services {
   padding: var(--section-gap) 0;
@@ -392,61 +537,68 @@ nav .nav-inner {
 .services-header {
   text-align: left;
   margin-bottom: clamp(3rem, 6vw, 5rem);
-  max-width: 600px;
 }
 
 .services-header h2 {
   font-family: var(--display);
   font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 400;
-  line-height: 1.1;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
   letter-spacing: -0.03em;
   margin-bottom: 1rem;
+}
+
+.services-header h2 .accent {
+  color: var(--accent);
 }
 
 .services-header p {
   color: var(--muted);
   font-size: 1.0625rem;
   line-height: 1.7;
+  max-width: 540px;
 }
 
-/* Zigzag layout instead of 3 equal cards */
 .service-item {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(2rem, 4vw, 4rem);
   align-items: center;
   padding: clamp(2rem, 4vw, 3.5rem);
+  background: var(--surface);
+  border: 2px solid var(--border);
   border-radius: 1.5rem;
-  transition: background 0.3s ease;
-}
-
-.service-item:not(:last-child) {
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 2rem;
+  transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
 .service-item:hover {
-  background: var(--accent-soft);
+  border-color: var(--accent);
+  transform: translateY(-3px);
 }
 
-.service-item:nth-child(even) .service-visual {
-  order: -1;
+.service-item:nth-child(odd) .service-visual {
+  order: 2;
+}
+
+.service-item:nth-child(even) .service-text {
+  order: 2;
 }
 
 .service-number {
   font-family: var(--display);
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 3rem;
+  font-weight: 900;
   color: var(--accent);
-  letter-spacing: 0.1em;
-  margin-bottom: 1rem;
+  line-height: 1;
+  margin-bottom: 0.75rem;
 }
 
 .service-item h3 {
   font-family: var(--display);
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
-  font-weight: 500;
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 800;
+  text-transform: uppercase;
   letter-spacing: -0.02em;
   margin-bottom: 0.75rem;
   line-height: 1.15;
@@ -460,14 +612,10 @@ nav .nav-inner {
 }
 
 .service-visual {
-  height: 320px;
+  height: 300px;
   border-radius: 1rem;
   overflow: hidden;
-  background: var(--surface);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
 }
 
 .service-visual img {
@@ -481,11 +629,27 @@ nav .nav-inner {
   padding: var(--section-gap) 0;
   background: var(--ink);
   color: var(--canvas);
+  position: relative;
+  overflow: hidden;
+}
+
+.method::before {
+  content: 'COL';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30vw;
+  font-weight: 900;
+  color: rgba(255,255,255,0.02);
+  letter-spacing: -0.04em;
+  pointer-events: none;
 }
 
 .method-inner {
   max-width: var(--container);
   margin: 0 auto;
+  position: relative;
 }
 
 .method-tag {
@@ -493,27 +657,26 @@ nav .nav-inner {
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--accent);
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 1.25rem;
 }
 
 .method h2 {
   font-family: var(--display);
   font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 400;
-  line-height: 1.1;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
   letter-spacing: -0.03em;
   margin-bottom: 1rem;
 }
 
-.method h2 em {
-  font-family: var(--serif-italic);
-  font-style: italic;
+.method h2 .accent {
   color: var(--accent);
 }
 
 .method-desc {
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.45);
   font-size: 1.0625rem;
   line-height: 1.7;
   max-width: 540px;
@@ -527,30 +690,52 @@ nav .nav-inner {
 }
 
 .step {
-  padding: 2rem;
-  border: 1px solid rgba(255,255,255,0.08);
+  padding: 2.5rem 2rem;
+  border: 2px solid rgba(255,255,255,0.08);
   border-radius: 1.25rem;
-  transition: border-color 0.3s ease, transform 0.3s ease;
+  transition: border-color 0.3s ease, transform 0.3s ease, background 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
 }
 
 .step:hover {
-  border-color: rgba(154,123,79,0.3);
-  transform: translateY(-2px);
+  border-color: rgba(232,184,0,0.3);
+  transform: translateY(-3px);
+  background: rgba(255,255,255,0.03);
+}
+
+.step:hover::before {
+  transform: scaleX(1);
 }
 
 .step-num {
   font-family: var(--display);
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 3rem;
+  font-weight: 900;
   color: var(--accent);
   margin-bottom: 1rem;
-  opacity: 0.6;
+  opacity: 0.4;
+  line-height: 1;
 }
 
 .step h4 {
   font-family: var(--display);
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
   margin-bottom: 0.5rem;
   letter-spacing: -0.01em;
 }
@@ -576,15 +761,15 @@ nav .nav-inner {
 .testimonials-header h2 {
   font-family: var(--display);
   font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 400;
-  line-height: 1.1;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
   letter-spacing: -0.03em;
   margin-bottom: 1rem;
 }
 
-.testimonials-header p {
-  color: var(--muted);
-  font-size: 1.0625rem;
+.testimonials-header h2 .accent {
+  color: var(--accent);
 }
 
 .testimonial-grid {
@@ -596,15 +781,28 @@ nav .nav-inner {
 
 .testimonial-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 1.5rem;
   padding: 2.25rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  position: relative;
+}
+
+.testimonial-card::before {
+  content: '"';
+  font-family: var(--serif);
+  font-size: 5rem;
+  color: var(--accent);
+  line-height: 0.5;
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  opacity: 0.15;
 }
 
 .testimonial-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.06);
+  border-color: var(--accent);
 }
 
 .testimonial-card:first-child {
@@ -616,17 +814,7 @@ nav .nav-inner {
   line-height: 1.8;
   color: var(--ink);
   margin-bottom: 1.5rem;
-}
-
-.testimonial-quote::before {
-  content: '"';
-  font-family: var(--serif-italic);
-  font-size: 3rem;
-  color: var(--accent);
-  line-height: 0;
-  display: block;
-  margin-bottom: 1rem;
-  opacity: 0.5;
+  padding-top: 2rem;
 }
 
 .testimonial-author {
@@ -636,11 +824,12 @@ nav .nav-inner {
 }
 
 .testimonial-avatar {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
+  border: 2px solid var(--accent);
 }
 
 .testimonial-avatar img {
@@ -650,7 +839,7 @@ nav .nav-inner {
 }
 
 .testimonial-name {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9375rem;
 }
 
@@ -664,16 +853,16 @@ nav .nav-inner {
   padding: var(--section-gap) 0;
   max-width: var(--container);
   margin: 0 auto;
-  text-align: center;
 }
 
 .cta-inner {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--ink);
+  color: var(--canvas);
   border-radius: 2rem;
   padding: clamp(3rem, 8vw, 6rem) 2rem;
   position: relative;
   overflow: hidden;
+  text-align: center;
 }
 
 .cta-inner::before {
@@ -682,30 +871,29 @@ nav .nav-inner {
   top: -50%;
   left: 50%;
   transform: translateX(-50%);
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(154,123,79,0.06), transparent 70%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(232,184,0,0.1), transparent 70%);
   pointer-events: none;
 }
 
 .cta-section h2 {
   font-family: var(--display);
   font-size: clamp(2rem, 4vw, 3.5rem);
-  font-weight: 400;
-  line-height: 1.1;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
   letter-spacing: -0.03em;
   margin-bottom: 1rem;
   position: relative;
 }
 
-.cta-section h2 em {
-  font-family: var(--serif-italic);
-  font-style: italic;
+.cta-section h2 .accent {
   color: var(--accent);
 }
 
 .cta-section p {
-  color: var(--muted);
+  color: rgba(255,255,255,0.5);
   font-size: 1.0625rem;
   max-width: 480px;
   margin: 0 auto 2.5rem;
@@ -723,20 +911,22 @@ nav .nav-inner {
 
 .cta-phone {
   font-size: 0.875rem;
-  color: var(--muted);
+  color: rgba(255,255,255,0.4);
   margin-top: 2rem;
   position: relative;
 }
 
 .cta-phone a {
   color: var(--accent);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* ========== FOOTER ========== */
 footer {
   border-top: 1px solid var(--border);
   padding: 3rem 0;
+  background: var(--ink);
+  color: rgba(255,255,255,0.5);
 }
 
 .footer-inner {
@@ -749,9 +939,15 @@ footer {
   gap: 1rem;
 }
 
-.footer-inner p {
-  font-size: 0.8125rem;
-  color: var(--muted);
+.footer-logo {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--canvas);
+  letter-spacing: -0.03em;
+}
+
+.footer-logo .accent {
+  color: var(--accent);
 }
 
 .footer-links {
@@ -762,12 +958,12 @@ footer {
 
 .footer-links a {
   font-size: 0.8125rem;
-  color: var(--muted);
+  color: rgba(255,255,255,0.4);
   transition: color 0.2s ease;
 }
 
 .footer-links a:hover {
-  color: var(--ink);
+  color: var(--accent);
 }
 
 /* ========== RESPONSIVE ========== */
@@ -780,7 +976,7 @@ footer {
 
   .hero-content { padding-right: 0; }
   .hero-image { height: 50vh; }
-  .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+  .hero-stats { flex-wrap: wrap; gap: 1.25rem; }
 
   .nav-links { display: none; }
 
@@ -789,12 +985,14 @@ footer {
   }
 
   .about-image-wrap { aspect-ratio: 16/10; }
+  .about-features { grid-template-columns: 1fr; }
 
   .service-item {
     grid-template-columns: 1fr;
   }
 
-  .service-item:nth-child(even) .service-visual {
+  .service-item:nth-child(odd) .service-visual,
+  .service-item:nth-child(even) .service-text {
     order: 0;
   }
 
@@ -813,7 +1011,7 @@ footer {
 
 @media (max-width: 600px) {
   .hero h1 {
-    font-size: 2.25rem;
+    font-size: 2.5rem;
   }
 
   .hero-actions {
@@ -854,7 +1052,7 @@ footer {
 <!-- ========== NAV ========== -->
 <nav>
   <div class="nav-inner">
-    <div class="logo">C<span>O</span>L</div>
+    <div class="logo">COL</div>
     <ul class="nav-links">
       <li><a href="#sobre">Sobre</a></li>
       <li><a href="#servicos">Serviços</a></li>
@@ -865,36 +1063,63 @@ footer {
   </div>
 </nav>
 
+<!-- ========== MARQUEE ========== -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="dot"></span>Implantes Dentários</span>
+    <span class="marquee-item"><span class="dot"></span>Ortodontia</span>
+    <span class="marquee-item"><span class="dot"></span>Clareamento</span>
+    <span class="marquee-item"><span class="dot"></span>Endodontia</span>
+    <span class="marquee-item"><span class="dot"></span>Próteses</span>
+    <span class="marquee-item"><span class="dot"></span>Odontopediatria</span>
+    <span class="marquee-item"><span class="dot"></span>Harmonização Facial</span>
+    <span class="marquee-item"><span class="dot"></span>Emergência</span>
+    <span class="marquee-item"><span class="dot"></span>Implantes Dentários</span>
+    <span class="marquee-item"><span class="dot"></span>Ortodontia</span>
+    <span class="marquee-item"><span class="dot"></span>Clareamento</span>
+    <span class="marquee-item"><span class="dot"></span>Endodontia</span>
+    <span class="marquee-item"><span class="dot"></span>Próteses</span>
+    <span class="marquee-item"><span class="dot"></span>Odontopediatria</span>
+    <span class="marquee-item"><span class="dot"></span>Harmonização Facial</span>
+    <span class="marquee-item"><span class="dot"></span>Emergência</span>
+  </div>
+</div>
+
 <!-- ========== HERO ========== -->
 <section class="hero">
   <div class="hero-content reveal">
-    <div class="hero-label">Clínica Psicológica</div>
-    <h1>Espaço onde a<br>mente encontra<br><em>clareza</em></h1>
-    <p>Atendimento psicológico baseado em evidências, sem jargão desnecessário. Resultados reais para pessoas que decidiram olhar pra dentro.</p>
+    <div class="hero-label">Clínica Odontológica</div>
+    <h1>
+      Seu sorriso<br>
+      merece<br>
+      <span class="accent">excelência</span>
+    </h1>
+    <p>Tecnologia de ponta, profissionais especializados e atendimento que respeita seu tempo. Da limpeza ao implante — tudo num lugar só.</p>
     <div class="hero-actions">
       <a href="#contato" class="btn-primary">
         Agendar consulta
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="#metodo" class="btn-secondary">Conhecer método</a>
+      <a href="#servicos" class="btn-secondary">Ver serviços</a>
     </div>
     <div class="hero-stats">
-      <div>
-        <div class="stat-number">2.400+</div>
+      <div class="stat">
+        <div class="stat-number">5.800+</div>
         <div class="stat-label">Pacientes atendidos</div>
       </div>
-      <div>
-        <div class="stat-number">12 anos</div>
-        <div class="stat-label">Experiência clínica</div>
+      <div class="stat">
+        <div class="stat-number">15 anos</div>
+        <div class="stat-label">De experiência</div>
       </div>
-      <div>
-        <div class="stat-number">47,2%</div>
-        <div class="stat-label">Melhora nas 8 primeiras sessões</div>
+      <div class="stat">
+        <div class="stat-number">98,3%</div>
+        <div class="stat-label">Satisfação comprovada</div>
       </div>
     </div>
   </div>
   <div class="hero-image reveal" style="transition-delay: 0.15s">
-    <img src="https://picsum.photos/seed/clinica01/800/1000" alt="Ambiente acolhedor da clínica COL">
+    <img src="https://picsum.photos/seed/dental01/800/1000" alt="Consultório moderno da COL">
+    <div class="hero-badge">CRO-XXXXX</div>
   </div>
 </section>
 
@@ -902,13 +1127,40 @@ footer {
 <section class="about" id="sobre">
   <div class="about-grid">
     <div class="about-image-wrap reveal">
-      <img src="https://picsum.photos/seed/psicologa02/800/1000" alt="Profissional da clínica">
+      <img src="https://picsum.photos/seed/dentist02/800/1000" alt="Equipe da clínica COL">
+      <div class="about-image-badge">Desde 2011</div>
     </div>
     <div class="reveal" style="transition-delay: 0.15s">
       <div class="about-tag">Sobre a COL</div>
-      <h2>Não vendemos <em>felicidade</em>. Oferecemos ferramentas.</h2>
-      <p class="about-text">A COL nasceu de uma constatação simples: a maioria das pessoas chega à terapia sem saber o que esperar. Aqui, o processo é transparente — desde a primeira sessão você sabe o que vai acontecer, quanto tempo pode levar e quais são seus direitos.</p>
-      <p class="about-text">Trabalhamos com TCC, terapia analítico-comportamental e neuropsicologia aplicada. Sem misticismo, sem promessa de cura em três sessões. Ciência e escuta, nessa ordem.</p>
+      <h2>Não é só dente.<br>É <span class="accent">confiança</span>.</h2>
+      <p class="about-text">A COL nasceu da ideia de que ir ao dentista não precisa ser uma experiência fria e mecânica. Aqui, cada paciente tem plano, histórico e objetivo — não só uma cadeira marcada.</p>
+      <p class="about-text">Contamos com scanner intraoral 3D, radiografia digital de baixa radiação e laser terapêutico. Tecnologia que reduz tempo, desconforto e aumenta precisão no resultado final.</p>
+      <div class="about-features">
+        <div class="about-feature">
+          <div class="check">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L19 7"/></svg>
+          </div>
+          Scanner 3D intraoral
+        </div>
+        <div class="about-feature">
+          <div class="check">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L19 7"/></svg>
+          </div>
+          Radiografia digital
+        </div>
+        <div class="about-feature">
+          <div class="check">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L19 7"/></svg>
+          </div>
+          Sedação consciente
+        </div>
+        <div class="about-feature">
+          <div class="check">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L19 7"/></svg>
+          </div>
+          Atendimento humanizado
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -917,51 +1169,51 @@ footer {
 <section class="services" id="servicos">
   <div class="services-header reveal">
     <div class="about-tag">Serviços</div>
-    <h2>Cada processo exige uma abordagem diferente</h2>
-    <p>Modalidades pensadas pra resolver, não pra criar dependência.</p>
+    <h2>Cada caso exige<br><span class="accent">abordagem certa</span></h2>
+    <p>Do preventivo ao complexo. Tudo integrado, sem precisar indicar outro especialista.</p>
   </div>
 
   <div class="service-item reveal">
     <div class="service-text">
       <div class="service-number">01</div>
-      <h3>Terapia Individual</h3>
-      <p>Sessões semanais de 50 minutos. Foco em ansiedade, depressão, luto e autoconhecimento. O formato mais eficaz quando há um objetivo claro definido juntos.</p>
+      <h3>Implantes<br>Dentários</h3>
+      <p>Implantes unitários, múltiples ou protocolo sobre implante. Planejamento digital com guia cirúrgico impresso em 3D. Cirurgia guiada, menos invasiva, recuperação mais rápida.</p>
     </div>
     <div class="service-visual">
-      <img src="https://picsum.photos/seed/terapia03/600/400" alt="Terapia individual">
+      <img src="https://picsum.photos/seed/implant03/600/400" alt="Implantes dentários">
     </div>
   </div>
 
   <div class="service-item reveal" style="transition-delay: 0.1s">
     <div class="service-text">
       <div class="service-number">02</div>
-      <h3>Terapia de Casal</h3>
-      <p>Encontros quinzenais de 80 minutos. Mediação de conflitos, comunicação e reconstrução de vínculo. Não é arbitragem — é estruturação.</p>
+      <h3>Ortodontia<br>& Invisalign</h3>
+      <p>Aparelho fixo metálico, estético ou alinhadores transparentes. Tratamento personalizado com planejamento digital 3D. Resultado previsível desde o primeiro dia.</p>
     </div>
     <div class="service-visual">
-      <img src="https://picsum.photos/seed/casal04/600/400" alt="Terapia de casal">
+      <img src="https://picsum.photos/seed/ortho04/600/400" alt="Ortodontia e Invisalign">
     </div>
   </div>
 
   <div class="service-item reveal" style="transition-delay: 0.1s">
     <div class="service-text">
       <div class="service-number">03</div>
-      <h3>Avaliação Neuropsicológica</h3>
-      <p>Bateria de testes padronizados para TDAH, TEA, funções executivas e memória. Relatório detalhado com devolutiva completa e encaminhamentos quando necessário.</p>
+      <h3>Estética<br>Dental</h3>
+      <p>Clareamento profissional, facetas de porcelana, lentes de contato dental e restaurações estéticas. Transformação natural, sem aspecto artificial.</p>
     </div>
     <div class="service-visual">
-      <img src="https://picsum.photos/seed/neuro05/600/400" alt="Avaliação neuropsicológica">
+      <img src="https://picsum.photos/seed/aesthetic05/600/400" alt="Estética dental">
     </div>
   </div>
 
   <div class="service-item reveal" style="transition-delay: 0.1s">
     <div class="service-text">
       <div class="service-number">04</div>
-      <h3>Atendimento Online</h3>
-      <p>Mesma estrutura do presencial, por videochamada segura. Para quem mora fora, tem rotina apertada ou prefere o conforto de casa. Plataforma com criptografia de ponta a ponta.</p>
+      <h3>Odonto<br>Pediátrico</h3>
+      <p>Consultas lúdicas para crianças de 1 a 12 anos. Preventivos, selantes, restaurações estéticas em decíduos. Ambiente pensado pra criança não ter medo de dentista.</p>
     </div>
     <div class="service-visual">
-      <img src="https://picsum.photos/seed/online06/600/400" alt="Atendimento online">
+      <img src="https://picsum.photos/seed/kids06/600/400" alt="Odontopediatria">
     </div>
   </div>
 </section>
@@ -970,24 +1222,24 @@ footer {
 <section class="method" id="metodo">
   <div class="method-inner">
     <div class="method-tag reveal">Método</div>
-    <h2 class="reveal">Sem mistério.<br><em>Sem dependência.</em></h2>
-    <p class="method-desc reveal">A terapia não precisa durar anos. Nosso objetivo é que você saia andando com as próprias pernas.</p>
+    <h2 class="reveal">Sem surpresa.<br><span class="accent">Sem dor.</span></h2>
+    <p class="method-desc reveal">Você sabe o que vai acontecer, quanto custa e quanto tempo leva antes de sentar na cadeira.</p>
 
     <div class="method-steps">
       <div class="step reveal">
         <div class="step-num">01</div>
-        <h4>Mapeamento</h4>
-        <p>Primeiras 2 sessões são de escuta e avaliação. Entendemos o contexto, histórico e definimos objetivos mensuráveis juntos.</p>
+        <h4>Avaliação Digital</h4>
+        <p>Scanner intraoral 3D, radiografia panorâmica e exame clínico completo. Você vê na tela exatamente o que precisa antes de qualquer procedimento.</p>
       </div>
       <div class="step reveal" style="transition-delay: 0.1s">
         <div class="step-num">02</div>
-        <h4>Intervenção</h4>
-        <p>Técnicas baseadas em evidências aplicadas de forma direta. Cada sessão tem pauta, cada pauta tem direção. Sem divagação infinita.</p>
+        <h4>Plano de Tratamento</h4>
+        <p>Proposta detalhada com opções, valores, prazos e formas de pagamento. Sem pressão. Sem letra miúda. Você aprova no seu tempo.</p>
       </div>
       <div class="step reveal" style="transition-delay: 0.2s">
         <div class="step-num">03</div>
-        <h4>Alta Terapêutica</h4>
-        <p>Quando os objetivos são atingidos, encerramos com plano de manutenção. Você não fica preso — vai embora preparado.</p>
+        <h4>Execução & Resultado</h4>
+        <p>Procedimentos com anestesia digital, laser e equipamento de última geração. Conforto que você não acha que existe em dentista.</p>
       </div>
     </div>
   </div>
@@ -997,51 +1249,51 @@ footer {
 <section class="testimonials" id="depoimentos">
   <div class="testimonials-header reveal">
     <div class="about-tag">Depoimentos</div>
-    <h2 class="reveal">O que dizem quem passou por aqui</h2>
+    <h2 class="reveal">Quem <span class="accent">sentou na cadeira</span> aprova</h2>
   </div>
 
   <div class="testimonial-grid">
     <div class="testimonial-card reveal">
       <div class="testimonial-quote">
-        Depois de dois anos num terapeuta que só acenava e dizia "como você se sente com isso", na COL tive pela primeira vez alguém que me deu direção real. Em quatro meses eu já conseguia identificar os gatilhos e lidar sem entrar em espiral.
+        Tenho pavor de dentista desde criança. Na COL fizeram a avaliação inteira com scanner, eu vi tudo na tela — sem desconforto nenhum. Fiz o implante com sedação e acordei com a coisa andando. Quatro meses depois, esqueci que era prótese.
       </div>
       <div class="testimonial-author">
         <div class="testimonial-avatar">
-          <img src="https://i.pravatar.cc/100?img=32" alt="Marina Costela">
+          <img src="https://i.pravatar.cc/100?img=47" alt="Ricardo Almeida Prado">
         </div>
         <div>
-          <div class="testimonial-name">Marina Costela</div>
-          <div class="testimonial-role">Designer, 31 anos</div>
+          <div class="testimonial-name">Ricardo Almeida Prado</div>
+          <div class="testimonial-role">Empresário, 52 anos</div>
         </div>
       </div>
     </div>
 
     <div class="testimonial-card reveal" style="transition-delay: 0.1s">
       <div class="testimonial-quote">
-        Minha esposa e eu estávamos à beira do divórcio. A terapia de casal aqui nos ensinou a conversar de novo — não a concordar, mas a conversar. Fez diferença real.
+        Levei meus dois filhos. A menina de 4 anos saiu do consultório querendo voltar. O ambiente, o jeito que tratam — não é teatro, é competência mesmo.
       </div>
       <div class="testimonial-author">
         <div class="testimonial-avatar">
-          <img src="https://i.pravatar.cc/100?img=12" alt="Rafael Mendes">
+          <img src="https://i.pravatar.cc/100?img=26" alt="Juliana Ferreira Costa">
         </div>
         <div>
-          <div class="testimonial-name">Rafael Mendes</div>
-          <div class="testimonial-role">Engenheiro, 38 anos</div>
+          <div class="testimonial-name">Juliana Ferreira Costa</div>
+          <div class="testimonial-role">Advogada, 36 anos</div>
         </div>
       </div>
     </div>
 
     <div class="testimonial-card reveal" style="transition-delay: 0.2s">
       <div class="testimonial-quote">
-        Fiz a avaliação neuropsicológica pro meu filho. O relatório foi o mais completo que já recebi — a escola inteira usou como base.
+        Fiz clareamento e facetas nos superiores. O resultado ficou natural — ninguém comenta que fiz, só falam que o sorriso melhorou. Exatamente o que eu queria.
       </div>
       <div class="testimonial-author">
         <div class="testimonial-avatar">
-          <img src="https://i.pravatar.cc/100?img=26" alt="Camila Rocha Dias">
+          <img src="https://i.pravatar.cc/100?img=33" alt="Beatriz Monteiro Lima">
         </div>
         <div>
-          <div class="testimonial-name">Camila Rocha Dias</div>
-          <div class="testimonial-role">Professora, 44 anos</div>
+          <div class="testimonial-name">Beatriz Monteiro Lima</div>
+          <div class="testimonial-role">Arquiteta, 29 anos</div>
         </div>
       </div>
     </div>
@@ -1051,23 +1303,24 @@ footer {
 <!-- ========== CTA ========== -->
 <section class="cta-section" id="contato">
   <div class="cta-inner reveal">
-    <h2>O primeiro passo é<br>o mais <em>difícil</em></h2>
-    <p>Agende sua primeira sessão. Sem compromisso de continuidade — você decide quando parar.</p>
-    <div class="cta-actions">
+    <h2 class="reveal">Seu próximo sorriso<br>começa <span class="accent">agora</span></h2>
+    <p class="reveal">Agende sua avaliação. Sem compromisso, sem pressão — primeiro a gente entende o que você precisa.</p>
+    <div class="cta-actions reveal">
       <a href="https://wa.me/5511999999999" class="btn-primary" target="_blank" rel="noopener">
         Agendar pelo WhatsApp
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="tel:+551147852854" class="btn-secondary">Ligar agora</a>
+      <a href="tel:+5511999999999" class="btn-secondary" style="border-color: rgba(255,255,255,0.2); color: var(--canvas);">Ligar agora</a>
     </div>
-    <p class="cta-phone">Ou ligue direto: <a href="tel:+551147852854">(11) 4785-2854</a></p>
+    <p class="cta-phone">Ou ligue direto: <a href="tel:+5511999999999">(11) 99999-9999</a></p>
   </div>
 </section>
 
 <!-- ========== FOOTER ========== -->
 <footer>
   <div class="footer-inner">
-    <p>COL Clínica Psicológica — CRP 06/XXXXX</p>
+    <div class="footer-logo">COL <span class="accent">.</span></div>
+    <p>Clínica Odontológica — CRO-XXXXX</p>
     <ul class="footer-links">
       <li><a href="#">Política de Privacidade</a></li>
       <li><a href="#">Instagram</a></li>
